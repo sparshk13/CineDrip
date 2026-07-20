@@ -1,0 +1,46 @@
+{
+  "name": "cinedrip-backend",
+  "version": "1.0.0",
+  "description": "CineDrip backend - enterprise movie recommender API",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "lint": "eslint .",
+    "test": "jest --runInBand --forceExit",
+    "test:unit": "jest --runInBand --forceExit tests/recommender.test.js",
+    "test:integration": "jest --runInBand --forceExit tests/integration.test.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.1.6",
+    "nodemon": "^3.0.3",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js",
+      "**/__tests__/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "routes/**/*.js",
+      "services/**/*.js",
+      "middleware/**/*.js"
+    ]
+  }
+}

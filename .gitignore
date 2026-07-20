@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Env / secrets
+.env
+
+# Build output
+dist/
+build/
+
+# OS / editor
+.DS_Store
+*.log
+
+# CommandCode internal
+.commandcode/
+
+# Documentation files
+01-project-overview.md
+02-backend-architecture.md
+03-backend-routes.md
+04-frontend-architecture.md
+05-frontend-ui.md
+06-critical-rules.md

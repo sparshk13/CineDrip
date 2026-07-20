@@ -1,0 +1,41 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: cinedrip
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build:
+      context: ./cinedrip-backend
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      MONGO_URI: mongodb://mongo:27017/cinedrip
+      JWT_SECRET: ${JWT_SECRET:-change_me_in_prod}
+      TMDB_API_KEY: ${TMDB_API_KEY:-}
+      TMDB_BASE_URL: https://api.themoviedb.org/3
+      # Allow the Docker frontend (:8080), normal Vite dev (:5173), and bare
+      # localhost. Unset CORS_ORIGIN lets the backend reflect any origin (dev).
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080,http://localhost:5173,http://localhost}
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./cinedrip-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:

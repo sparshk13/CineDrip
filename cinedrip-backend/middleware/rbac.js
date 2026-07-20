@@ -1,0 +1,10 @@
+const ROLES = { USER: 'user', ADMIN: 'admin' };
+
+const requireRole = (...roles) => (req, res, next) => {
+  if (!req.user || !roles.includes(req.user.role)) {
+    return res.status(403).json({ message: 'Insufficient permissions' });
+  }
+  next();
+};
+
+module.exports = { ROLES, requireRole };
