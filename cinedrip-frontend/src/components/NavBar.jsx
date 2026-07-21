@@ -1,10 +1,10 @@
 import { NavLink, useLocation } from 'react-router-dom';
 
 const tabs = [
-  { to: '/home', label: 'home', icon: '🏠' },
-  { to: '/explore', label: 'explore', icon: '🔍' },
-  { to: '/watchlist', label: 'watchlist', icon: '🔖' },
-  { to: '/profile', label: 'profile', icon: '👤' },
+  { to: '/home', label: 'Home', icon: '🏠' },
+  { to: '/explore', label: 'Explore', icon: '🔍' },
+  { to: '/watchlist', label: 'Watchlist', icon: '🔖' },
+  { to: '/profile', label: 'Profile', icon: '👤' },
 ];
 
 export default function NavBar() {

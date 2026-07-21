@@ -76,7 +76,7 @@ export default function Home() {
             {user?.username?.[0]?.toUpperCase()}
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">your picks today 🔥</h1>
+            <h1 className="text-l font-bold text-white">your picks today 🔥</h1>
             <p className="text-xs text-gray-400">curated from your taste</p>
           </div>
         </div>

@@ -92,7 +92,7 @@ function buildSections(movies, taste) {
   // Section 1: Top matches (always present)
   const top = take(() => true, 14);
   if (top.length >= 6) {
-    sections.push({ title: 'tailor-made for you', movies: top });
+    sections.push({ title: 'tailored for you', movies: top });
   }
 
   // Section 2: Fresh drops (2023+)

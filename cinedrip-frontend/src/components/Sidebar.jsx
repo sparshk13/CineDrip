@@ -3,11 +3,11 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const tabs = [
-  { to: '/home', label: 'home', icon: '🏠' },
-  { to: '/explore', label: 'explore', icon: '🔍' },
-  { to: '/watchlist', label: 'watchlist', icon: '🔖' },
-  { to: '/profile', label: 'profile', icon: '👤' },
-  { to: '/admin', label: 'admin', icon: '🛡️', adminOnly: true },
+  { to: '/home', label: 'Home', icon: '🏠' },
+  { to: '/explore', label: 'Explore', icon: '🔍' },
+  { to: '/watchlist', label: 'Watchlist', icon: '🔖' },
+  { to: '/profile', label: 'Profile', icon: '👤' },
+  { to: '/admin', label: 'Admin', icon: '🛡️', adminOnly: true },
 ];
 
 export default function Sidebar() {
