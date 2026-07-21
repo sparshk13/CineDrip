@@ -133,8 +133,20 @@ function scoreMovie(movie, taste) {
   return Math.min(score, 100);
 }
 
+// Fisher-Yates shuffle for tie-breaking randomness
+function shuffleTies(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = i - 1;
+    if (Math.abs(arr[i].score - arr[j].score) < 0.01) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [arr[j], arr[k]] = [arr[k], arr[j]];
+    }
+  }
+  return arr;
+}
+
 function recommend(movies, taste, opts = {}) {
-  const count = opts.count || 20;
+  const count = opts.count || 80;
   // 1. Score every candidate.
   const scored = movies
     .map((m) => {
@@ -148,13 +160,21 @@ function recommend(movies, taste, opts = {}) {
 
   if (scored.length === 0) return [];
 
-  // 2. Genre-diversified selection (max-min style).
+  // 1b. Shuffle ties for non-deterministic output
+  shuffleTies(scored);
+
+  // 2. Genre + origin-diversified selection (max-min style).
   // Pick the highest-scoring movie first, then greedily add the next best
   // candidate that introduces the least genre overlap with what we already
-  // have. This prevents the list from collapsing into one repeated genre and
-  // guarantees a varied, watchable mix.
+  // have. Additionally boost non-Hollywood content to ensure diverse origins.
   const selected = [scored[0]];
   const chosenGenres = new Set(scored[0].genres);
+  const originCounts = {};
+  for (const o of scored[0].origins) {
+    originCounts[o] = (originCounts[o] || 0) + 1;
+  }
+
+  const ORIGIN_TARGET_RATIO = 0.35;
 
   const remaining = scored.slice(1);
   while (selected.length < count && remaining.length > 0) {
@@ -164,8 +184,22 @@ function recommend(movies, taste, opts = {}) {
     for (let i = 0; i < remaining.length; i++) {
       const m = remaining[i];
       const overlap = m.genres.filter((g) => chosenGenres.has(g)).length;
-      // Reward score, penalize genre overlap. Score range ~0-100.
-      const key = m.score - overlap * 18 - i * 0.01;
+
+      // Origin diversity: boost non-Hollywood if underrepresented
+      const nonHollywoodCount = Object.entries(originCounts)
+        .filter(([k]) => k !== 'hollywood')
+        .reduce((s, [, v]) => s + v, 0);
+      const currentNonHollywoodRatio = selected.length > 0
+        ? nonHollywoodCount / selected.length
+        : 0;
+
+      let originBonus = 0;
+      if (!m.origins.includes('hollywood') && currentNonHollywoodRatio < ORIGIN_TARGET_RATIO) {
+        originBonus = 8;
+      }
+
+      // Reward score, penalize genre overlap, reward origin diversity
+      const key = m.score - overlap * 18 + originBonus - i * 0.01;
       if (key > bestKey) {
         bestKey = key;
         bestIdx = i;
@@ -175,6 +209,9 @@ function recommend(movies, taste, opts = {}) {
     const pick = remaining.splice(bestIdx, 1)[0];
     selected.push(pick);
     pick.genres.forEach((g) => chosenGenres.add(g));
+    for (const o of pick.origins) {
+      originCounts[o] = (originCounts[o] || 0) + 1;
+    }
   }
 
   return selected;

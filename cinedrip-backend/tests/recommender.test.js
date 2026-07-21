@@ -76,7 +76,7 @@ describe('recommender service (pure functions)', () => {
       language: 'en',
       id: i,
     }));
-    const recs = recommend(movies, taste);
+    const recs = recommend(movies, taste, { count: 20 });
     expect(recs.length).toBeLessThanOrEqual(20);
     expect(recs[0].matchPercent).toBeGreaterThanOrEqual(recs[recs.length - 1].matchPercent);
     expect(recs[0]).toHaveProperty('matchPercent');

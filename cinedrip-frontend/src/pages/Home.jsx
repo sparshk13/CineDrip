@@ -11,7 +11,7 @@ import { useAuth } from '../hooks/useAuth';
 export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [movies, setMovies] = useState([]);
+  const [sections, setSections] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState({});
@@ -29,7 +29,12 @@ export default function Home() {
     setLoading(true);
     try {
       const { data } = await recommendationsAPI.get();
-      setMovies(data);
+      // Handle both new structured format and legacy flat array
+      if (Array.isArray(data)) {
+        setSections([{ title: 'your picks today', movies: data }]);
+      } else {
+        setSections(data.sections || []);
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to load recommendations');
     } finally {
@@ -63,26 +68,6 @@ export default function Home() {
 
   if (loading) return <Loader />;
 
-  // Partition the diverse pool into non-overlapping sections so the same
-  // movie never appears in more than one row.
-  const seen = new Set();
-  const take = (predicate, n) => {
-    const out = [];
-    for (const m of movies) {
-      if (out.length >= n) break;
-      if (seen.has(m.tmdbId)) continue;
-      if (predicate(m)) {
-        seen.add(m.tmdbId);
-        out.push(m);
-      }
-    }
-    return out;
-  };
-
-  const topPicks = take(() => true, 12);
-  const highRated = take((m) => m.avgRating >= 7.5, 12);
-  const recent = take((m) => m.releaseYear >= 2020, 12);
-
   return (
     <div className="ml-[78px] min-h-screen bg-base pb-12">
       <div className="px-4 pt-6">
@@ -97,30 +82,17 @@ export default function Home() {
         </div>
       </div>
 
-      <Row
-        title="top matches for you"
-        movies={topPicks}
-        onWatchlist={handleWatchlist}
-        watchlist={watchlist}
-      />
-      {recent.length > 0 && (
+      {sections.map((section) => (
         <Row
-          title="fresh drops (2020+)"
-          movies={recent}
+          key={section.title}
+          title={section.title}
+          movies={section.movies}
           onWatchlist={handleWatchlist}
           watchlist={watchlist}
         />
-      )}
-      {highRated.length > 0 && (
-        <Row
-          title="critically loved"
-          movies={highRated}
-          onWatchlist={handleWatchlist}
-          watchlist={watchlist}
-        />
-      )}
+      ))}
 
-      {movies.length === 0 && (
+      {sections.length === 0 && (
         <p className="px-4 text-center text-gray-400">no picks yet — check back soon!</p>
       )}
 
