@@ -31,7 +31,7 @@ export default function Home() {
       const { data } = await recommendationsAPI.get();
       // Handle both new structured format and legacy flat array
       if (Array.isArray(data)) {
-        setSections([{ title: 'your picks today', movies: data }]);
+        setSections([{ title: 'Handpicked for You', movies: data }]);
       } else {
         setSections(data.sections || []);
       }
@@ -76,7 +76,7 @@ export default function Home() {
             {user?.username?.[0]?.toUpperCase()}
           </div>
           <div>
-            <h1 className="text-l font-bold text-white">your picks today 🔥</h1>
+            <h1 className="text-l font-bold text-white">Handpicked for You 🔥</h1>
             <p className="text-xs text-gray-400">curated from your taste</p>
           </div>
         </div>
