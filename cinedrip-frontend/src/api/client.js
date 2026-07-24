@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://cinedrip-production.up.railway.app/api';
+
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: API_BASE,
 });
 
 client.interceptors.request.use((config) => {
