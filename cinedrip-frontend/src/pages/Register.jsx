@@ -32,7 +32,7 @@ export default function Register() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-base px-6">
       <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-surface p-8">
-        <h1 className="mb-6 text-center text-2xl font-bold text-white">register</h1>
+        <h1 className="mb-6 text-center text-2xl font-bold text-white">Register</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             name="username"
