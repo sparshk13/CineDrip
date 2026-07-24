@@ -3,13 +3,15 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 export default function Landing() {
-  const { user } = useAuth();
+  const { user, hydrated } = useAuth();
 
   useEffect(() => {
-    if (user) {
+    if (hydrated && user) {
       window.location.href = '/home';
     }
-  }, [user]);
+  }, [hydrated, user]);
+
+  if (!hydrated) return null;
 
   if (user) return <Navigate to="/home" replace />;
 

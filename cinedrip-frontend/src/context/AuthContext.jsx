@@ -5,6 +5,7 @@ export const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('cinedrip_token');
@@ -13,6 +14,7 @@ export function AuthProvider({ children }) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
+    setHydrated(true);
   }, []);
 
   const login = useCallback((newToken, newUser) => {
@@ -40,7 +42,7 @@ export function AuthProvider({ children }) {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <AuthContext.Provider value={{ user, token, isAdmin, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, token, hydrated, isAdmin, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
