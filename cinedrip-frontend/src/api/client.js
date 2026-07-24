@@ -1,10 +1,8 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: 'https://cinedrip-production.up.railway.app/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
 });
-
-console.log('Axios baseURL:', client.defaults.baseURL);
 
 client.interceptors.request.use((config) => {
   const token = localStorage.getItem('cinedrip_token');
