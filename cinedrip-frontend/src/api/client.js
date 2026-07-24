@@ -19,6 +19,7 @@ client.interceptors.request.use((config) => {
 export const authAPI = {
   register: (payload) => client.post('/auth/register', payload),
   login: (payload) => client.post('/auth/login', payload),
+  update: (payload) => client.put('/auth/profile', payload),
 };
 
 export const tasteAPI = {

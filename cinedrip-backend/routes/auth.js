@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 const User = require('../models/User');
 
 const router = express.Router();
@@ -90,6 +91,73 @@ router.post('/login', async (req, res) => {
         message: "Server error",
     });
 }
+});
+
+// PUT /api/auth/profile
+router.put('/profile', auth, async (req, res) => {
+  try {
+    const { username, email, currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (username !== undefined) {
+      if (!username.trim()) {
+        return res.status(400).json({ message: 'Username cannot be empty' });
+      }
+      if (username !== user.username) {
+        const existing = await User.findOne({ username: username.trim() });
+        if (existing) {
+          return res.status(400).json({ message: 'Username already taken' });
+        }
+      }
+      user.username = username.trim();
+    }
+
+    if (email !== undefined) {
+      if (!email.trim()) {
+        return res.status(400).json({ message: 'Email cannot be empty' });
+      }
+      if (email.toLowerCase() !== user.email) {
+        const existing = await User.findOne({ email: email.toLowerCase() });
+        if (existing) {
+          return res.status(400).json({ message: 'Email already registered' });
+        }
+      }
+      user.email = email.toLowerCase();
+    }
+
+    if (newPassword) {
+      if (!currentPassword) {
+        return res.status(400).json({ message: 'Current password is required' });
+      }
+      const match = await bcrypt.compare(currentPassword, user.password);
+      if (!match) {
+        return res.status(401).json({ message: 'Current password is incorrect' });
+      }
+      if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters' });
+      }
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      isOnboarded: user.isOnboarded,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Server error',
+    });
+  }
 });
 
 module.exports = router;
