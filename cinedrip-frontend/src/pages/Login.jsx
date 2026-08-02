@@ -30,40 +30,57 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-base px-6">
-      <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-surface p-8">
-        <h1 className="mb-6 text-center text-2xl font-bold text-white">Login</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="email"
-            type="email"
-            placeholder="email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-white/10 bg-[#0a0a0f] px-4 py-3 text-white outline-none focus:border-purple-500"
-          />
-          <input
-            name="password"
-            type="password"
-            placeholder="password"
-            value={form.password}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-white/10 bg-[#0a0a0f] px-4 py-3 text-white outline-none focus:border-purple-500"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 py-3 font-semibold text-white disabled:opacity-50"
-          >
-            {loading ? '...' : 'login'}
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm text-gray-400">
-          new here?{' '}
-          <a href="/register" className="text-purple-400">
-            register
-          </a>
-        </p>
+    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center relative overflow-hidden px-6">
+      {/* Background glow */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-96 h-96 bg-purple-600 rounded-full blur-3xl opacity-40"></div>
+      </div>
+
+      {/* Floating decorative dots */}
+      <div className="absolute top-20 left-20 w-32 h-32 bg-purple-500 rounded-full blur-3xl opacity-10 pointer-events-none"></div>
+      <div className="absolute bottom-20 right-20 w-40 h-40 bg-pink-500 rounded-full blur-3xl opacity-10 pointer-events-none"></div>
+      <div className="absolute top-10 right-40 w-20 h-20 bg-blue-500 rounded-full blur-3xl opacity-15 pointer-events-none"></div>
+
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="rounded-2xl border border-white/10 bg-surface p-8">
+          <div className="text-center mb-6">
+            <div className="text-5xl mb-2">🎬</div>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+              Login
+            </h1>
+          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              name="email"
+              type="email"
+              placeholder="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-white/10 bg-[#0a0a0f] px-4 py-3 text-white outline-none focus:border-purple-500"
+            />
+            <input
+              name="password"
+              type="password"
+              placeholder="password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full rounded-lg border border-white/10 bg-[#0a0a0f] px-4 py-3 text-white outline-none focus:border-purple-500"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 py-3 font-semibold text-white disabled:opacity-50"
+            >
+              {loading ? '...' : 'login'}
+            </button>
+          </form>
+          <p className="mt-4 text-center text-sm text-gray-400">
+            new here?{' '}
+            <a href="/register" className="text-purple-400">
+              register
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
