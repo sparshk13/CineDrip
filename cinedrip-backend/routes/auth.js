@@ -35,6 +35,7 @@ router.post('/register', async (req, res) => {
     });
 
     const token = signToken(user);
+    console.log("Generated Token:", token);
 
     res.status(201).json({
       token,
@@ -74,7 +75,8 @@ router.post('/login', async (req, res) => {
     }
 
     const token = signToken(user);
-
+    console.log("Generated Token:", token);
+    
     res.status(200).json({
       token,
       user: {
