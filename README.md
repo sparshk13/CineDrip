@@ -11,6 +11,53 @@ role management.
 
 ---
 
+## 🚀 Live Deployment
+
+**CineDrip is deployed and available online:**
+
+👉 https://cinedrip.up.railway.app
+
+### Deployment
+
+The production application consists of:
+
+* **Frontend:** React + Vite + Tailwind CSS
+* **Backend:** Node.js + Express
+* **Database:** MongoDB
+* **Authentication:** JWT + bcrypt
+* **Movie Data:** TMDB API
+* **Production security:** Helmet, CORS, rate limiting, RBAC, and scoped user queries
+
+### Production Architecture
+
+```text
+┌─────────────────────┐
+│   CineDrip Frontend │
+│ React + Vite +      │
+│ Tailwind CSS        │
+└──────────┬──────────┘
+           │
+           │ /api
+           ▼
+┌─────────────────────┐
+│   CineDrip Backend  │
+│ Node.js + Express   │
+└──────────┬──────────┘
+           │
+      ┌────┴─────┐
+      ▼          ▼
+┌──────────┐  ┌──────────┐
+│ MongoDB  │  │   TMDB   │
+│ Database │  │   API    │
+└──────────┘  └──────────┘
+```
+
+### Production Environment
+
+The deployed application uses environment variables for sensitive configuration. Secrets such as the MongoDB connection string, JWT signing secret, and TMDB API key are never committed to the repository.
+
+For local development, see the [Local development](#local-development) section below.
+
 ## Features
 
 - **Authentication** — register/login with bcrypt-hashed passwords and 7-day JWTs.
